@@ -47,10 +47,17 @@ bool             loadImage (const std::string& imagePath, cv::Mat& image);
 cv::VideoCapture openVideo (const std::string& videoPath);
 bool             openVideo (const std::string& videoPath, cv::VideoCapture& video);
 
-// open a video for writing based on input video parameters
+// new video for writing based on input video parameters
 cv::VideoWriter  newVideo (const std::string& videoOutPath, const cv::VideoCapture& videoIn);
 bool             newVideo (const std::string& videoOutPath, const cv::VideoCapture& videoIn,
                            cv::VideoWriter& videoOut);
+    
+// new video for writing a number of images
+cv::VideoWriter  newVideo (const std::string& videoOutPath, const cv::Mat& image,
+                           const double fps = 30, const int codec = 0);
+bool             newVideo (const std::string& videoOutPath, const cv::Mat& image,
+                           const double fps, const int codec, cv::VideoWriter& videoOut);
+
 
 
 //

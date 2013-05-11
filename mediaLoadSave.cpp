@@ -71,11 +71,11 @@ bool evg::openVideo(const string& videoPath, VideoCapture& _video)
 }
     
     
-cv::VideoWriter evg::newVideo (const std::string& _videoOutPath, const cv::VideoCapture& _videoIn)
+cv::VideoWriter evg::newVideo (const string& _videoOutPath, const VideoCapture& _videoIn)
 {
     // get parameters from the input video
     cv::VideoCapture videoIn = _videoIn;
-    int codec = (int)(videoIn.get(CV_CAP_PROP_FOURCC));
+    int codec = static_cast<int>(videoIn.get(CV_CAP_PROP_FOURCC));
     double fps = videoIn.get(CV_CAP_PROP_FPS);
     const Size frameSize ( (int)(videoIn.get(CV_CAP_PROP_FRAME_WIDTH)),
                            (int)(videoIn.get(CV_CAP_PROP_FRAME_HEIGHT)) );
@@ -84,10 +84,6 @@ cv::VideoWriter evg::newVideo (const std::string& _videoOutPath, const cv::Video
     // set default frame rate
     const int DefaultFps = 30;
     if (fps == 0) fps = DefaultFps;
-    // set default code (combine ascii code of each of four letter into an int)
-    const char* DefaultCodec = "XVID";
-    if (codec == 0) codec = (DefaultCodec[0] << 24) + (DefaultCodec[1] << 16)
-                          + (DefaultCodec[2] << 8) + DefaultCodec[3];
     
     cout << "evg::newVideo(): codec code = " << codec << endl;
     cout << "                 frame rate = " << fps << endl;
@@ -116,10 +112,66 @@ cv::VideoWriter evg::newVideo (const std::string& _videoOutPath, const cv::Video
 }
 
 
-bool evg::newVideo (const string& _videoOutPath, const VideoCapture& _videoIn, VideoWriter& videoOut)
+bool evg::newVideo (const string& _videoOutPath, const VideoCapture& _videoIn,
+                    VideoWriter& videoOut)
 {
     try {
         videoOut = evg::newVideo(_videoOutPath, _videoIn);
+        return 1;
+    } catch (...) { return 0; }
+}
+
+
+cv::VideoWriter evg::newVideo (const std::string& _videoOutPath, const Mat& _image,
+                               const double fps, const int codec)
+{
+    // check if the _image can be written as a frame
+    /// TODO: anything else?
+    if (_image.channels() != 1 && _image.channels() != 3)
+    {
+        cerr << "evg::newVideo(): Image must be of 1 or 3 channels." << endl;
+        throw exception();
+    }
+    if (_image.depth() != CV_8U)
+        cerr << "warning evg::newVideo(): the image is not CV_8U. "
+                "You will have to provide CV_8U frames for writing video." << endl;
+
+    // set parameters
+    const Size frameSize ( (int)(_image.size().width), (int)(_image.size().height) );
+    bool isColor = ( _image.channels() == 3 );
+    
+    cout << "evg::newVideo(): codec code = " << codec << endl;
+    cout << "                 frame rate = " << fps << endl;
+    cout << "                 frame size = [" << frameSize.width << " x "
+         << frameSize.height << "]" << endl;
+    
+    // check the parent path for output video
+    path p(_videoOutPath);
+    if (! exists(p.parent_path()) )
+    {
+        cerr << "evg::newVideo(): Video directory path " << p.parent_path()
+             << " does not exist." << endl;
+        throw exception();
+    }
+    
+    // open video for output
+    VideoWriter videoOut;
+    if (! videoOut.open(_videoOutPath, codec, fps, frameSize, isColor) )
+    {
+        cerr << "evg::newVideo(): Video " << absolute(_videoOutPath)
+             << " failed to open." << endl;
+        throw exception();
+    }
+    
+    return videoOut;
+}
+
+
+bool evg::newVideo (const string& _videoOutPath, const Mat& _image,
+                    const double fps, const int codec, VideoWriter& videoOut)
+{
+    try {
+        videoOut = evg::newVideo(_videoOutPath, _image, fps, codec);
         return 1;
     } catch (...) { return 0; }
 }
@@ -170,10 +222,8 @@ void evg::testImage (const cv::Mat& image)
 {
     cout << "testing image..." << endl;
     namedWindow("evg_test", CV_WINDOW_AUTOSIZE);
-    imshow("evg_test", image);
-    while (1)
-        if ( cv::waitKey(20) == 27 )
-            throw std::exception();
+    imshow("evg_test, press any key", image);
+    waitKey();
 }
 
 
