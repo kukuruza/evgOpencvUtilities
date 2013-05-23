@@ -14,18 +14,17 @@ using namespace boost::filesystem;
 
 Mat evg::loadImage (const std::string& imagePath)
 {
-    path p(imagePath);
+    path p = absolute(path(imagePath));
     if (! exists(p) )
     {
-        std::cerr << "evg::loadImage(): Path " << absolute(imagePath)
-                  << " does not exist." << std::endl;
-        throw std::exception();
+        cerr << "evg::loadImage(): Path " << p << " does not exist." << endl;
+        throw exception();
     }
-    cv::Mat image = cv::imread(imagePath, CV_LOAD_IMAGE_COLOR);
+    cv::Mat image = cv::imread(p.string(), CV_LOAD_IMAGE_COLOR);
     if (! image.data )
     {
-        std::cerr << "Image " << absolute(imagePath) << " failed to open." << std::endl;
-        throw std::exception();
+        cerr << "Image " << p << " failed to open." << endl;
+        throw exception();
     }
     return image;
 }
@@ -36,25 +35,26 @@ bool evg::loadImage (const std::string& imagePath, cv::Mat& image)
     try {
         image = loadImage(imagePath);
         return 1;
-    } catch(...) { return 0; }
+    } catch(...) {
+        cerr << "evg::loadImage(): exception caught." << endl;
+        return 0;
+    }
 }
 
 
 VideoCapture evg::openVideo(const string& videoPath)
 {
-    path p(videoPath);
+    path p = absolute(path(videoPath));
     if (! exists(p) )
     {
-        cerr << "evg::openVideo(): Video path " << absolute(videoPath)
-             << " does not exist." << endl;
+        cerr << "evg::openVideo(): Video path " << p << " does not exist." << endl;
         throw exception();
     }
     
     VideoCapture video;
-    if (! video.open(videoPath) )
+    if (! video.open(p.string()) )
     {
-        cerr << "evg::openVideo(): Video " << absolute(videoPath)
-             << " failed to open." << endl;
+        cerr << "evg::openVideo(): Video " << p << " failed to open." << endl;
         throw exception();
     }
     
@@ -67,7 +67,9 @@ bool evg::openVideo(const string& videoPath, VideoCapture& _video)
     try {
         _video = openVideo(videoPath);
         return 1;
-    } catch (...) { return 0; }
+    } catch (...) {
+        cerr << "evg::openVideo(): exception caught." << endl;
+        return 0; }
 }
     
     
@@ -75,7 +77,7 @@ cv::VideoWriter evg::newVideo (const string& _videoOutPath, const VideoCapture& 
 {
     // get parameters from the input video
     cv::VideoCapture videoIn = _videoIn;
-    int codec = static_cast<int>(videoIn.get(CV_CAP_PROP_FOURCC));
+    int codec = (int)(videoIn.get(CV_CAP_PROP_FOURCC));
     double fps = videoIn.get(CV_CAP_PROP_FPS);
     const Size frameSize ( (int)(videoIn.get(CV_CAP_PROP_FRAME_WIDTH)),
                            (int)(videoIn.get(CV_CAP_PROP_FRAME_HEIGHT)) );
@@ -85,26 +87,25 @@ cv::VideoWriter evg::newVideo (const string& _videoOutPath, const VideoCapture& 
     const int DefaultFps = 30;
     if (fps == 0) fps = DefaultFps;
     
-    cout << "evg::newVideo(): codec code = " << codec << endl;
-    cout << "                 frame rate = " << fps << endl;
-    cout << "                 frame size = [" << frameSize.width << " x "
+    cout << "evg::newVideo(video): codec code = " << codec << endl;
+    cout << "                      frame rate = " << fps << endl;
+    cout << "                      frame size = [" << frameSize.width << " x "
          << frameSize.height << "]" << endl;
 
     // check the parent path for output video
-    path p(_videoOutPath);
+    path p = absolute(path(_videoOutPath));
     if (! exists(p.parent_path()) )
     {
-        cerr << "evg::newVideo(): Video directory path " << p.parent_path()
-             << " does not exist." << endl;
+        cerr << "evg::newVideo(video): output video directory path "
+             << p.parent_path() << " does not exist." << endl;
         throw exception();
     }
 
     // open video for output
     VideoWriter videoOut;
-    if (! videoOut.open(_videoOutPath, codec, fps, frameSize) )
+    if (! videoOut.open(p.string(), codec, fps, frameSize) )
     {
-        cerr << "evg::newVideo(): Video " << absolute(_videoOutPath)
-             << " failed to open." << endl;
+        cerr << "evg::newVideo(video): output video " << p << " failed to open." << endl;
         throw exception();
     }
     
@@ -118,7 +119,10 @@ bool evg::newVideo (const string& _videoOutPath, const VideoCapture& _videoIn,
     try {
         videoOut = evg::newVideo(_videoOutPath, _videoIn);
         return 1;
-    } catch (...) { return 0; }
+    } catch (...) {
+        cerr << "evg::newVideo(video): exception caught." << endl;
+        return 0;
+    }
 }
 
 
@@ -129,37 +133,36 @@ cv::VideoWriter evg::newVideo (const std::string& _videoOutPath, const Mat& _ima
     /// TODO: anything else?
     if (_image.channels() != 1 && _image.channels() != 3)
     {
-        cerr << "evg::newVideo(): Image must be of 1 or 3 channels." << endl;
+        cerr << "evg::newVideo(image): Image must be of 1 or 3 channels." << endl;
         throw exception();
     }
     if (_image.depth() != CV_8U)
-        cerr << "warning evg::newVideo(): the image is not CV_8U. "
+        cerr << "warning evg::newVideo(image): the image is not CV_8U. "
                 "You will have to provide CV_8U frames for writing video." << endl;
 
     // set parameters
     const Size frameSize ( (int)(_image.size().width), (int)(_image.size().height) );
     bool isColor = ( _image.channels() == 3 );
     
-    cout << "evg::newVideo(): codec code = " << codec << endl;
-    cout << "                 frame rate = " << fps << endl;
-    cout << "                 frame size = [" << frameSize.width << " x "
+    cout << "evg::newVideo(image): codec code = " << codec << endl;
+    cout << "                      frame rate = " << fps << endl;
+    cout << "                      frame size = [" << frameSize.width << " x "
          << frameSize.height << "]" << endl;
     
     // check the parent path for output video
-    path p(_videoOutPath);
+    path p = absolute(path(_videoOutPath));
     if (! exists(p.parent_path()) )
     {
-        cerr << "evg::newVideo(): Video directory path " << p.parent_path()
-             << " does not exist." << endl;
+        cerr << "evg::newVideo(image): output video directory path "
+             << p.parent_path() << " does not exist." << endl;
         throw exception();
     }
     
     // open video for output
     VideoWriter videoOut;
-    if (! videoOut.open(_videoOutPath, codec, fps, frameSize, isColor) )
+    if (! videoOut.open(p.string(), codec, fps, frameSize, isColor) )
     {
-        cerr << "evg::newVideo(): Video " << absolute(_videoOutPath)
-             << " failed to open." << endl;
+        cerr << "evg::newVideo(image): output video " << p << " failed to open." << endl;
         throw exception();
     }
     
@@ -173,25 +176,26 @@ bool evg::newVideo (const string& _videoOutPath, const Mat& _image,
     try {
         videoOut = evg::newVideo(_videoOutPath, _image, fps, codec);
         return 1;
-    } catch (...) { return 0; }
+    } catch (...) {
+        cerr << "evg::newVideo(image): exception caught." << endl;
+        return 0;
+    }
 }
 
 
 Mat evg::undistortImage(const std::string& calibrationPath, const Mat& _image)
 {
     // open calibration file
-    path p(calibrationPath);
+    path p = absolute(path(calibrationPath));
     if (! exists(p) )
     {
-        cerr << "evg::calibImage(): Path " << absolute(calibrationPath)
-        << " does not exist." << endl;
+        cerr << "evg::calibImage(): Path " << p << " does not exist." << endl;
         throw exception();
     }
-    FileStorage fs(calibrationPath.c_str(), FileStorage::READ);
+    FileStorage fs(p.string().c_str(), FileStorage::READ);
     if (! fs.isOpened() )
     {
-        cerr << "evg::calibImage(): Calibration file " << absolute(calibrationPath)
-        << " failed to open." << endl;
+        cerr << "evg::calibImage(): Calibration file " << p << " failed to open." << endl;
         throw exception();
     }
     
@@ -209,12 +213,65 @@ Mat evg::undistortImage(const std::string& calibrationPath, const Mat& _image)
 }
 
 
-bool evg::undistortImageBool (const string& calibrationPath, Mat& image)
+bool evg::undistortImageBool (const std::string& calibrationPath, cv::Mat& image)
 {
     try {
         image = undistortImage(calibrationPath, image);
         return 1;
-    } catch (...) { return 0; }
+    } catch (...) {
+        cerr << "undistortImageBool(): exception caught." << endl;
+        return 0;
+    }
+}
+
+
+void evg::undistortVideo (const string& _calibrationPath, VideoCapture& _videoIn,
+                          const string& _videoOutPath)
+{
+    // open calibration file
+    path p = absolute(path(_calibrationPath));
+    if (! exists(p) )
+    {
+        cerr << "evg::undistortVideo(): Path " << p << " does not exist." << endl;
+        throw exception();
+    }
+    FileStorage fs (p.string().c_str(), FileStorage::READ);
+    if (! fs.isOpened() )
+    {
+        cerr << "evg::undistortVideo(): Calibration file " << p
+             << " failed to open." << endl;
+        throw exception();
+    }
+    
+    // read calibration file
+    Mat cameraMatrix, distCoeffs;
+    fs["Camera_Matrix"] >> cameraMatrix;
+    fs["Distortion_Coefficients"] >> distCoeffs;
+    fs.release();
+
+    // start output video
+    VideoWriter videoOut = evg::newVideo (_videoOutPath, _videoIn);
+    Mat frameIn, frameOut;
+    
+    // undistort video
+    while (_videoIn.read(frameIn))
+    {
+        undistort (frameIn, frameOut, cameraMatrix, distCoeffs);
+        videoOut << frameOut;
+    }
+}
+
+
+bool evg::undistortVideoBool (const string& _calibrationPath, VideoCapture& _videoIn,
+                              const string& _videoOutPath)
+{
+    try {
+        undistortVideo (_calibrationPath, _videoIn, _videoOutPath);
+        return 1;
+    } catch (...) {
+        cerr << "evg::undistortVideoBool(): exception caught." << endl;
+        return 0;
+    }
 }
 
 
@@ -232,7 +289,10 @@ bool evg::testImageBool (const cv::Mat& image)
     try {
         testImage(image);
         return 1;
-    } catch(...) { return 0; }
+    } catch(...) {
+        cerr << "evg::testImageBool(): exception caught." << endl;
+        return 0;
+    }
 }
 
 
@@ -241,18 +301,16 @@ bool evg::testImageBool (const cv::Mat& image)
 Mat evg::dlmread (const std::string& dlmfilePath)
 {
     // open file
-    path p(dlmfilePath);
+    path p = absolute(path(dlmfilePath));
     if (! exists(p) )
     {
-        cerr << "evg::dlmread(): Path " << absolute(dlmfilePath)
-             << " does not exist." << endl;
+        cerr << "evg::dlmread(): Path " << p << " does not exist." << endl;
         throw exception();
     }
-    ifstream fileStream (dlmfilePath.c_str());
+    ifstream fileStream (p.string().c_str());
     if (!fileStream.good())
     {
-        cerr << "evg::dlmread(): File " << absolute(dlmfilePath)
-             << " failed to open." << endl;
+        cerr << "evg::dlmread(): File " << p << " failed to open." << endl;
         throw exception();
     }
     
@@ -274,7 +332,7 @@ Mat evg::dlmread (const std::string& dlmfilePath)
     numRows = row;
     if(fileStream.bad() || iss.bad())
     {
-        std::cerr << "evg::dlmread(): error reading the file." << std::endl;
+        std::cerr << "evg::dlmread(): error reading the file " << p << std::endl;
         throw exception();
     }
     
@@ -309,7 +367,10 @@ bool evg::dlmread (const std::string& dlmfilePath, cv::Mat& _matrix)
     try {
         _matrix = dlmread (dlmfilePath);
         return 1;
-    } catch(...) { return 0; }
+    } catch(...) {
+        cerr << "evg::dlmread(): exception caught." << endl;
+        return 0;
+    }
 }
 
 
@@ -317,7 +378,7 @@ bool evg::dlmread (const std::string& dlmfilePath, cv::Mat& _matrix)
 void evg::dlmwrite (const std::string& dlmfilePath, const cv::Mat& _matrix)
 {
     // check the directory path for output video
-    path p(dlmfilePath);
+    path p = absolute(path(dlmfilePath));
     if (! exists(p.parent_path()) )
     {
         cerr << "evg::dlmwrite(): Directory path " << p.parent_path()
@@ -329,8 +390,7 @@ void evg::dlmwrite (const std::string& dlmfilePath, const cv::Mat& _matrix)
     ofstream ofs (p.string().c_str());
     if (!ofs.good())
     {
-        cerr << "evg::dlmwrite(): File " << absolute(dlmfilePath)
-             << " failed to open." << endl;
+        cerr << "evg::dlmwrite(): File " << p << " failed to open." << endl;
         throw exception();
     }
     
@@ -350,7 +410,10 @@ bool evg::dlmwriteBool (const std::string& dlmfilePath, const cv::Mat& matrix)
     try {
         dlmwrite(dlmfilePath, matrix);
         return 1;
-    } catch(...) { return 0; }
+    } catch(...) {
+        cerr << "evg::dlmwriteBool(): exception caught." << endl;
+        return 0;
+    }
 }
 
 
@@ -362,7 +425,7 @@ void evg::saveMat ( const string& filename, const Mat& M)
         assert (M.channels() == 1);
     
         // check the parent path for output video
-        path p(filename);
+        path p = absolute(path(filename));
         if (! exists(p.parent_path()) )
         {
             cerr << "evg::saveMat(): Directory path " << p.parent_path()
@@ -374,7 +437,7 @@ void evg::saveMat ( const string& filename, const Mat& M)
             cerr << "evg::saveMat(): matrix is empty" << endl;
             throw exception();
         }
-        ofstream out(filename.c_str(), ios::out|ios::binary);
+        ofstream out(p.string().c_str(), ios::out|ios::binary);
         if (!out)
         {
             cerr << "evg::saveMat(): cannot open file for writing" << endl;
@@ -412,7 +475,10 @@ bool evg::saveMatBool ( const string& filename, const Mat& M)
     try {
         saveMat (filename, M);
         return 1;
-    } catch(...) { return 0; }
+    } catch(...) {
+        cerr << "evg::saveMatBool(): exception caught." << endl;
+        return 0;
+    }
 }
 
 
@@ -423,17 +489,16 @@ cv::Mat evg::readMat( const string& filename)
         Mat M;
     
         // open file
-        path p(filename);
+        path p = absolute(path(filename));
         if (! exists(p) )
         {
-            cerr << "evg::dlmread(): Path " << absolute(filename)
-                 << " does not exist." << endl;
+            cerr << "evg::dlmread(): Path " << p << " does not exist." << endl;
             throw exception();
         }
-        ifstream in(filename.c_str(), ios::in|ios::binary);
+        ifstream in (p.string().c_str(), ios::in|ios::binary);
         if (!in)
         {
-            cerr << "evg::readMat(): cannot open file for reading" << endl;
+            cerr << "evg::readMat(): cannot open file " << p << " for reading" << endl;
             throw exception();
         }
         int cols;
@@ -497,8 +562,8 @@ evg::SrcVideo::SrcVideo (const Type _type, const std::string _videoPath)
     CameraHeight(480)
 {
     if (type == FILE && videoPath == "")
-        std::cerr << "warning: evg::SrcVideo::SrcVideo(): input is set as file, "
-                  << "but file path is not specified." << std::endl;
+        cerr << "warning: evg::SrcVideo::SrcVideo(): input is set as file, "
+                "but file path is not specified." << endl;
 }
 
 bool evg::SrcVideo::openResource(VideoCapture& video)

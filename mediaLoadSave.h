@@ -64,9 +64,17 @@ bool             newVideo (const std::string& videoOutPath, const cv::Mat& image
 // extra for images
 //
 
-// undistort image using pre-set calibration from calibration file
+// undistort image using pre-set camera calibration file
 cv::Mat          undistortImage (const std::string& calibrationPath, const cv::Mat& image);
 bool             undistortImageBool (const std::string& calibrationPath, cv::Mat& image);
+
+// undistort video using pre-set camera calibration file
+void             undistortVideo (const std::string& calibrationPath,
+                                 cv::VideoCapture& videoIn,
+                                 const std::string& videoOutPath);
+bool             undistortVideoBool (const std::string& calibrationPath,
+                                     cv::VideoCapture& videoIn,
+                                     const std::string& videoOutPath);
 
 // display image in a new window and wait for Esc key from user before closing it
 void             testImage     (const cv::Mat& image);
