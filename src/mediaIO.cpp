@@ -2,17 +2,22 @@
 #include <fstream>
 #include <sstream>
 #include <exception>
+
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+
 #include <boost/filesystem.hpp>
-#include "mediaLoadSave.h"
+
+#include "mediaIO.h"
+
+namespace cv {
+namespace evg {
 
 using namespace std;
-using namespace cv;
 using namespace boost::filesystem;
 
 
-Mat evg::loadImage (const std::string& imagePath)
+Mat loadImage (const std::string& imagePath)
 {
     path p = absolute(path(imagePath));
     if (! exists(p) )
@@ -30,19 +35,19 @@ Mat evg::loadImage (const std::string& imagePath)
 }
 
 
-bool evg::loadImage (const std::string& imagePath, cv::Mat& image)
+bool loadImage (const std::string& imagePath, Mat& image)
 {
     try {
         image = loadImage(imagePath);
         return 1;
     } catch(...) {
-        cerr << "evg::loadImage(): exception caught." << endl;
+        cerr << "evg::loadImage(): failed." << endl;
         return 0;
     }
 }
 
 
-VideoCapture evg::openVideo(const string& videoPath)
+VideoCapture openVideo(const string& videoPath)
 {
     path p = absolute(path(videoPath));
     if (! exists(p) )
@@ -62,18 +67,18 @@ VideoCapture evg::openVideo(const string& videoPath)
 }
 
 
-bool evg::openVideo(const string& videoPath, VideoCapture& _video)
+bool openVideo(const string& videoPath, VideoCapture& _video)
 {
     try {
         _video = openVideo(videoPath);
         return 1;
     } catch (...) {
-        cerr << "evg::openVideo(): exception caught." << endl;
+        cerr << "evg::openVideo(): failed." << endl;
         return 0; }
 }
     
     
-cv::VideoWriter evg::newVideo (const string& _videoOutPath, const VideoCapture& _videoIn)
+VideoWriter newVideo (const string& _videoOutPath, const VideoCapture& _videoIn)
 {
     // get parameters from the input video
     cv::VideoCapture videoIn = _videoIn;
@@ -82,8 +87,7 @@ cv::VideoWriter evg::newVideo (const string& _videoOutPath, const VideoCapture& 
     const Size frameSize ( (int)(videoIn.get(CV_CAP_PROP_FRAME_WIDTH)),
                            (int)(videoIn.get(CV_CAP_PROP_FRAME_HEIGHT)) );
     
-    // in case of camera input
-    // set default frame rate
+    // in case of camera input, set default frame rate
     const int DefaultFps = 30;
     if (fps == 0) fps = DefaultFps;
     
@@ -92,7 +96,7 @@ cv::VideoWriter evg::newVideo (const string& _videoOutPath, const VideoCapture& 
     cout << "                      frame size = [" << frameSize.width << " x "
          << frameSize.height << "]" << endl;
 
-    // check the parent path for output video
+    // check the directory path for output video
     path p = absolute(path(_videoOutPath));
     if (! exists(p.parent_path()) )
     {
@@ -113,21 +117,21 @@ cv::VideoWriter evg::newVideo (const string& _videoOutPath, const VideoCapture& 
 }
 
 
-bool evg::newVideo (const string& _videoOutPath, const VideoCapture& _videoIn,
-                    VideoWriter& videoOut)
+bool newVideo (const string& _videoOutPath, const VideoCapture& _videoIn,
+               VideoWriter& videoOut)
 {
     try {
         videoOut = evg::newVideo(_videoOutPath, _videoIn);
         return 1;
     } catch (...) {
-        cerr << "evg::newVideo(video): exception caught." << endl;
+        cerr << "evg::newVideo(video): failed." << endl;
         return 0;
     }
 }
 
 
-cv::VideoWriter evg::newVideo (const std::string& _videoOutPath, const Mat& _image,
-                               const double fps, const int codec)
+VideoWriter newVideo (const std::string& _videoOutPath, const Mat& _image,
+                      const double fps, const int codec)
 {
     // check if the _image can be written as a frame
     /// TODO: anything else?
@@ -170,20 +174,20 @@ cv::VideoWriter evg::newVideo (const std::string& _videoOutPath, const Mat& _ima
 }
 
 
-bool evg::newVideo (const string& _videoOutPath, const Mat& _image,
-                    const double fps, const int codec, VideoWriter& videoOut)
+bool newVideo (const string& _videoOutPath, const Mat& _image,
+               const double fps, const int codec, VideoWriter& videoOut)
 {
     try {
         videoOut = evg::newVideo(_videoOutPath, _image, fps, codec);
         return 1;
     } catch (...) {
-        cerr << "evg::newVideo(image): exception caught." << endl;
+        cerr << "evg::newVideo(image): failed." << endl;
         return 0;
     }
 }
 
 
-Mat evg::undistortImage(const std::string& calibrationPath, const Mat& _image)
+Mat undistortImage(const std::string& calibrationPath, const Mat& _image)
 {
     // open calibration file
     path p = absolute(path(calibrationPath));
@@ -213,20 +217,20 @@ Mat evg::undistortImage(const std::string& calibrationPath, const Mat& _image)
 }
 
 
-bool evg::undistortImageBool (const std::string& calibrationPath, cv::Mat& image)
+bool undistortImageBool (const std::string& calibrationPath, cv::Mat& image)
 {
     try {
         image = undistortImage(calibrationPath, image);
         return 1;
     } catch (...) {
-        cerr << "undistortImageBool(): exception caught." << endl;
+        cerr << "undistortImageBool(): failed." << endl;
         return 0;
     }
 }
 
 
-void evg::undistortVideo (const string& _calibrationPath, VideoCapture& _videoIn,
-                          const string& _videoOutPath)
+void undistortVideo (const string& _calibrationPath, VideoCapture& _videoIn,
+                     const string& _videoOutPath)
 {
     // open calibration file
     path p = absolute(path(_calibrationPath));
@@ -262,20 +266,20 @@ void evg::undistortVideo (const string& _calibrationPath, VideoCapture& _videoIn
 }
 
 
-bool evg::undistortVideoBool (const string& _calibrationPath, VideoCapture& _videoIn,
-                              const string& _videoOutPath)
+bool undistortVideoBool (const string& _calibrationPath, VideoCapture& _videoIn,
+                         const string& _videoOutPath)
 {
     try {
         undistortVideo (_calibrationPath, _videoIn, _videoOutPath);
         return 1;
     } catch (...) {
-        cerr << "evg::undistortVideoBool(): exception caught." << endl;
+        cerr << "evg::undistortVideoBool(): failed." << endl;
         return 0;
     }
 }
 
 
-void evg::testImage (const cv::Mat& image)
+void testImage (const cv::Mat& image)
 {
     cout << "testing image..." << endl;
     namedWindow("evg_test", CV_WINDOW_AUTOSIZE);
@@ -284,21 +288,21 @@ void evg::testImage (const cv::Mat& image)
 }
 
 
-bool evg::testImageBool (const cv::Mat& image)
+bool testImageBool (const cv::Mat& image)
 {
     try {
         testImage(image);
         return 1;
     } catch(...) {
-        cerr << "evg::testImageBool(): exception caught." << endl;
+        cerr << "evg::testImageBool(): failed." << endl;
         return 0;
     }
 }
 
 
-// delimiter is always space now
-// matrix will be always CV_32F on output, it will put zeros for missing values
-Mat evg::dlmread (const std::string& dlmfilePath)
+// delimiter is always space or tab
+// matrix will put zeros for missing values
+Mat dlmread (const std::string& dlmfilePath, cv::Mat matrix, int row1, int col1)
 {
     // open file
     path p = absolute(path(dlmfilePath));
@@ -329,7 +333,7 @@ Mat evg::dlmread (const std::string& dlmfilePath)
             ;
         if (col > numCols) numCols = col;
     }
-    numRows = row;
+    numRows = row - row1;
     if(fileStream.bad() || iss.bad())
     {
         std::cerr << "evg::dlmread(): error reading the file " << p << std::endl;
@@ -340,12 +344,12 @@ Mat evg::dlmread (const std::string& dlmfilePath)
     fileStream.clear();
     fileStream.seekg(ios_base::beg);
     
-    // create the matrix of result size
-    Mat matrix = Mat::zeros(numRows, numCols, CV_32F);
+    // create the matrix of result size and of given type (8U by default)
+    matrix = Mat::zeros(numRows, numCols, matrix.type());
     
     // read file and put values into Mat
     float num;
-    for (int row = 0; getline(fileStream, line) && row != matrix.rows; ++row)
+    for (int row = row1; getline(fileStream, line) && row != matrix.rows; ++row)
     {
         iss.clear();
         iss.str(line);
@@ -362,20 +366,20 @@ Mat evg::dlmread (const std::string& dlmfilePath)
 }
 
 
-bool evg::dlmread (const std::string& dlmfilePath, cv::Mat& _matrix)
+bool dlmreadBool (const std::string& dlmfilePath, Mat matrix, int row1, int col1)
 {
     try {
-        _matrix = dlmread (dlmfilePath);
+        matrix = dlmread (dlmfilePath, matrix, row1, col1);
         return 1;
     } catch(...) {
-        cerr << "evg::dlmread(): exception caught." << endl;
+        cerr << "evg::dlmread(): failed." << endl;
         return 0;
     }
 }
 
 
 // delimiter is currently space only
-void evg::dlmwrite (const std::string& dlmfilePath, const cv::Mat& _matrix)
+void dlmwrite (const std::string& dlmfilePath, const Mat& _matrix)
 {
     // check the directory path for output video
     path p = absolute(path(dlmfilePath));
@@ -405,20 +409,20 @@ void evg::dlmwrite (const std::string& dlmfilePath, const cv::Mat& _matrix)
 }
 
 
-bool evg::dlmwriteBool (const std::string& dlmfilePath, const cv::Mat& matrix)
+bool dlmwriteBool (const std::string& dlmfilePath, const Mat& matrix)
 {
     try {
         dlmwrite(dlmfilePath, matrix);
         return 1;
     } catch(...) {
-        cerr << "evg::dlmwriteBool(): exception caught." << endl;
+        cerr << "evg::dlmwriteBool(): failed." << endl;
         return 0;
     }
 }
 
 
 // from http://stackoverflow.com/questions/3190378/opencv-store-to-database
-void evg::saveMat ( const string& filename, const Mat& M)
+void saveMat ( const string& filename, const Mat& M)
 {
     try {
         // only one channel
@@ -470,20 +474,20 @@ void evg::saveMat ( const string& filename, const Mat& M)
 }
 
 
-bool evg::saveMatBool ( const string& filename, const Mat& M)
+bool saveMatBool ( const string& filename, const Mat& M)
 {
     try {
         saveMat (filename, M);
         return 1;
     } catch(...) {
-        cerr << "evg::saveMatBool(): exception caught." << endl;
+        cerr << "evg::saveMatBool(): failed." << endl;
         return 0;
     }
 }
 
 
 // from http://stackoverflow.com/questions/3190378/opencv-store-to-database
-cv::Mat evg::readMat( const string& filename)
+Mat readMat( const string& filename)
 {
     try {
         Mat M;
@@ -545,17 +549,17 @@ cv::Mat evg::readMat( const string& filename)
 }
 
 
-bool evg::readMat( const string& filename, cv::Mat& M )
+bool readMat( const string& filename, Mat& M )
 {
     try {
-        M = evg::readMat(filename);
+        M = readMat(filename);
         return 1;
     } catch(...) { return 0; }
 }
 
 
 
-evg::SrcVideo::SrcVideo (const Type _type, const std::string _videoPath)
+SrcVideo::SrcVideo (const Type _type, const std::string _videoPath)
   : type (_type),
     videoPath(_videoPath),
     CameraWidth(640),
@@ -566,7 +570,7 @@ evg::SrcVideo::SrcVideo (const Type _type, const std::string _videoPath)
                 "but file path is not specified." << endl;
 }
 
-bool evg::SrcVideo::openResource(VideoCapture& video)
+bool SrcVideo::openResource(VideoCapture& video)
 {
     try {
         if (video.isOpened()) return 1;
@@ -602,14 +606,19 @@ bool evg::SrcVideo::openResource(VideoCapture& video)
     }
 }
 
-bool evg::SrcVideo::closeResource(VideoCapture& video)
+bool SrcVideo::closeResource(VideoCapture& video)
 {
     try {
         if (! video.isOpened()) return 1;
         video.release();
         return 1;
     } catch(...) {
-        cerr << "evg::SrcVideo::closeResource(): exception caught." << endl;
+        cerr << "evg::SrcVideo::closeResource(): failed." << endl;
         return 0;
     }
 }
+
+
+} // namespace evg
+} // namespace cv
+

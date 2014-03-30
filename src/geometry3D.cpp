@@ -4,11 +4,13 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include "geometry3D.h"
 
+namespace cv {
+namespace evg {
+
 using namespace std;
-using namespace cv;
 
 
-cv::Matx44f evg::pose (const cv::Matx33f& R, const cv::Matx31f& t)
+cv::Matx44f pose (const cv::Matx33f& R, const cv::Matx31f& t)
 {
     return Matx44f (R(0,0), R(0,1), R(0,2), t(0),
                     R(1,0), R(1,1), R(1,2), t(1),
@@ -17,7 +19,7 @@ cv::Matx44f evg::pose (const cv::Matx33f& R, const cv::Matx31f& t)
 }
 
 
-void evg::decomPose (const cv::Matx44f& pose, cv::Matx33f& R, cv::Matx31f& t)
+void decomPose (const cv::Matx44f& pose, cv::Matx33f& R, cv::Matx31f& t)
 {
     R = Matx33f (pose(0,0), pose(0,1), pose(0,2),
                  pose(1,0), pose(1,1), pose(1,2),
@@ -26,13 +28,13 @@ void evg::decomPose (const cv::Matx44f& pose, cv::Matx33f& R, cv::Matx31f& t)
 }
 
 
-cv::Matx31f evg::decomPose2t (const cv::Matx44f& pose)
+cv::Matx31f decomPose2t (const cv::Matx44f& pose)
 {
     return Matx31f (pose(0,3), pose(1,3), pose(2,3));
 }
 
 
-cv::Matx33f evg::decomPose2R (const cv::Matx44f& pose)
+cv::Matx33f decomPose2R (const cv::Matx44f& pose)
 {
     return Matx33f (pose(0,0), pose(0,1), pose(0,2),
                     pose(1,0), pose(1,1), pose(1,2),
@@ -40,7 +42,7 @@ cv::Matx33f evg::decomPose2R (const cv::Matx44f& pose)
 }
 
 
-cv::Matx44f evg::deltaPose (const cv::Matx44f& pose1, const cv::Matx44f& pose2)
+cv::Matx44f deltaPose (const cv::Matx44f& pose1, const cv::Matx44f& pose2)
 {
     Matx33f R1, R2;
     Matx31f t1, t2;
@@ -50,14 +52,14 @@ cv::Matx44f evg::deltaPose (const cv::Matx44f& pose1, const cv::Matx44f& pose2)
 }
 
 
-void evg::normHomogeneous (cv::Matx31f& homogCoord)
+void normHomogeneous (cv::Matx31f& homogCoord)
 {
    homogCoord = (homogCoord(2) == 0 ? homogCoord
                                     : homogCoord * (1.f / homogCoord(2)) );
 }
 
 // bottleneck: function needs to be relatively quick
-void evg::normHomogeneousRows (cv::Mat& homogCoords)
+void normHomogeneousRows (cv::Mat& homogCoords)
 {
     if (!homogCoords.data) return;
     
@@ -74,22 +76,23 @@ void evg::normHomogeneousRows (cv::Mat& homogCoords)
         norm = *(ptr + 2);
         if (norm != 0)
         {
-            *ptr++ = *ptr / norm;
-            *ptr++ = *ptr / norm;
+            *ptr = *ptr / norm;
+            ++ptr;
+            *ptr = *ptr / norm;
+            ++ptr;
             *ptr   = 1.f;
         }
     }
     return;
 }
 
-void evg::normHomography (cv::Matx33f& H)
+void normHomography (cv::Matx33f& H)
 {
     H = H * (1.f / H(2,2));
 }
 
 
-void evg::warpPerspectivePoints (const Matx33f& H,
-                                 const Mat& coords, Mat& warpedCoords)
+void warpPerspectivePoints (const Matx33f& H, const Mat& coords, Mat& warpedCoords)
 {
     // if warpedCoords were not preallocated, allocate now
     if (warpedCoords.size() != coords.size())
@@ -135,14 +138,14 @@ void evg::warpPerspectivePoints (const Matx33f& H,
 }
 
 
-cv::Matx33f evg::cameraK (const cv::Size& imageSize, const float f)
+cv::Matx33f cameraK (const cv::Size& imageSize, const float f)
 {
     return Matx33f(f, 0, imageSize.width / 2,
                    0, f, imageSize.height / 2,
                    0, 0, 1 );
 }
 
-cv::Matx33f evg::cameraK (const cv::Size& imageSize)
+cv::Matx33f cameraK (const cv::Size& imageSize)
 {
     // f is an average between width/2 and height/2
     float f = (imageSize.width + imageSize.height) / 2 / 2;
@@ -150,7 +153,7 @@ cv::Matx33f evg::cameraK (const cv::Size& imageSize)
 }
 
 
-Matx33f evg::pose2H (const Matx33f& K0, const Matx44f& p, const Matx33f& K)
+Matx33f pose2H (const Matx33f& K0, const Matx44f& p, const Matx33f& K)
 {
     // init R and t separately
     Matx33f absR (p(0,0),p(0,1),p(0,2), p(1,0),p(1,1),p(1,2), p(2,0),p(2,1),p(2,2));
@@ -172,8 +175,8 @@ Matx33f evg::pose2H (const Matx33f& K0, const Matx44f& p, const Matx33f& K)
 
 // from "Multiple View Geometry in Computer Vision 2nd Edition" Hartley, Zisserman
 //   (pp.326-327 in 2nd edition)
-cv::Matx33f evg::pose2H (const cv::Matx33f& _K0, const cv::Matx41f& _plane,
-                         const cv::Matx44f& _pose, const cv::Matx33f& _K)
+cv::Matx33f pose2H (const cv::Matx33f& _K0, const cv::Matx41f& _plane,
+                    const cv::Matx44f& _pose, const cv::Matx33f& _K)
 {
     // projection matrix M=[R t] from camera pose
     Matx33f R = evg::decomPose2R(_pose);
@@ -193,9 +196,9 @@ cv::Matx33f evg::pose2H (const cv::Matx33f& _K0, const cv::Matx41f& _plane,
 
 
 // from "Parameterizing Homographies" CMU-RI-TR-06-11 S.Baker, A.Datta, T.Kanade
-Matx33f evg::deltaPose2H (const cv::Matx44f& _pose1, const cv::Matx33f& K1,
-                          const cv::Matx44f& _pose2, const cv::Matx33f& K2,
-                          const cv::Matx41f& n )
+Matx33f deltaPose2H (const cv::Matx44f& _pose1, const cv::Matx33f& K1,
+                     const cv::Matx44f& _pose2, const cv::Matx33f& K2,
+                     const cv::Matx41f& n )
 {
     // get rotation and translation from poses
     Matx33f _R1, _R2;
@@ -236,8 +239,7 @@ void normalizeVectorL2 (cv::Matx31f& v)
 }
 
 
-cv::Matx44f evg::H2pose (const cv::Matx33f& _K0, const cv::Matx33f& _H,
-                         const cv::Matx33f& _K)
+cv::Matx44f H2pose (const cv::Matx33f& _K0, const cv::Matx33f& _H, const cv::Matx33f& _K)
 {
     Matx33f R;
     Matx31f t;
@@ -285,8 +287,7 @@ cv::Matx44f evg::H2pose (const cv::Matx33f& _K0, const cv::Matx33f& _H,
 
 
 
-void evg::displayHomogeneousPairs (const Mat& _coords1, const Mat& _coords2,
-                                   Mat& background)
+void displayHomogeneousPairs (const Mat& _coords1, const Mat& _coords2, Mat& background)
 {
     // check for non-valid. Otherwise, can't access type()
     if (!_coords1.data || !_coords2.data) return;
@@ -319,7 +320,7 @@ void evg::displayHomogeneousPairs (const Mat& _coords1, const Mat& _coords2,
 }
 
 
-void evg::drawCamera (const cv::Matx44f& pose, cv::Mat& background)
+void drawCamera (const cv::Matx44f& pose, cv::Mat& background)
 {
     // camera parameters - center at (0,0,1) looking at (0,0,0)
     Matx41f camCenter (0,0,1,1);
@@ -365,10 +366,10 @@ void evg::drawCamera (const cv::Matx44f& pose, cv::Mat& background)
 }
 
 
-void evg::projectPlanes (const std::vector<cv::Mat>& maps,
-                         const std::vector<cv::Matx44f>& planes,
-                         const cv::Matx44f& viewPoint,
-                         cv::Mat& background)
+void projectPlanes (const std::vector<cv::Mat>& maps,
+                    const std::vector<cv::Matx44f>& planes,
+                    const cv::Matx44f& viewPoint,
+                    cv::Mat& background)
 {
     assert (maps.size() == planes.size());
     
@@ -384,5 +385,9 @@ void evg::projectPlanes (const std::vector<cv::Mat>& maps,
         background += show;
     }
 }
+
+
+} // namespace evg
+} // namespace cv
 
 

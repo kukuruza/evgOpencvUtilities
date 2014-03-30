@@ -7,6 +7,7 @@
 #include <exception>
 #include <opencv2/core/core.hpp>
 
+namespace cv {
 namespace evg {
     
     
@@ -84,6 +85,7 @@ std::ostream& operator<< (std::ostream& os, const cv::Matx<Tp, m, n>& M)
 }
 
 
-}  // evg namespace
+} // namespace evg
+} // namespace cv
 
 #endif  // EVG_MISCELLANEOUS

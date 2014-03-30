@@ -34,6 +34,7 @@
 //     2) bool: write to std::cerr and return 0 on failure
 //
 
+namespace cv {
 namespace evg {
     
 
@@ -91,8 +92,8 @@ bool             dlmwriteBool (const std::string& dlmfilePath, const cv::Mat& ma
 
 // matrix will be always CV_32F on output, number of columns - from the largest row
 // function will complete shorter rows with zeros
-cv::Mat          dlmread (const std::string& dlmfilePath);
-bool             dlmread (const std::string& dlmfilePath, cv::Mat& matrix);
+cv::Mat          dlmread (const std::string& dlmfilePath, cv::Mat matrix = cv::Mat(), int row1 = 0);
+bool             dlmreadBool (const std::string& dlmfilePath, cv::Mat matrix = cv::Mat(), int row1 = 0);
 
 
 
@@ -153,5 +154,6 @@ inline bool operator!= (const SrcVideo& a, const SrcVideo& b)
 
     
 } // namespace evg
+} // namespace cv
 
 #endif // EVG_MEDIA_LOAD_SAVE

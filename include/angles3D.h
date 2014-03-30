@@ -27,6 +27,7 @@
 //   R:     camera rotation matrix is [3 x 3] matrix of type  cv::Matx33f
 //
 
+namespace cv {
 namespace evg {
 
     // rotation around axes
@@ -58,6 +59,7 @@ namespace evg {
     cv::Matx33f     sampleR (const float u1, const float u2, const float u3);
     
     
-} // evg namespace
+} // namespace evg
+} // namespace cv
 
 #endif // EVG_ANGLES_3D

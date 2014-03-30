@@ -33,6 +33,7 @@
 //   plane: [n, t] is [4 x 1] vector of type                  cv::Matx41f
 //
 
+namespace cv {
 namespace evg {
 
 
@@ -141,5 +142,6 @@ void            projectPlanes (const std::vector<cv::Mat>& maps,
 
 
 } // namespace evg
+} // namespace cv
 
 #endif // EVG_GEOMETRY_3D
