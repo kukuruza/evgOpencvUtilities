@@ -1,5 +1,4 @@
-# ignore all the videos, etc.
-data
+build
 
 # temporary from gedit
 *~
