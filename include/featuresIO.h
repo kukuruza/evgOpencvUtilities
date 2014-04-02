@@ -47,6 +47,20 @@ bool writeVsfmMatches   (const std::string& filepath,
 bool readVsfmMatches    (const std::string& filepath,
                          std::string& imName1, std::string& imName2,
                          std::vector<cv::DMatch>& matches);
+    
+bool writeSimpleMatches (const std::string& filepath,
+                         const std::string& imName1, const std::string& imName2,
+                         const std::vector<cv::KeyPoint>& keypoints1,
+                         const std::vector<cv::KeyPoint>& keypoints2,
+                         const std::vector<cv::DMatch>& matches);
+    
+bool readSimpleMatches  (const std::string& filepath,
+                         std::string& imName1, std::string& imName2,
+                         std::vector<cv::KeyPoint>& keypoints1,
+                         std::vector<cv::KeyPoint>& keypoints2,
+                         std::vector<cv::DMatch>& matches);
+    
+
 
 } // namespace evg
 } // namespace cv

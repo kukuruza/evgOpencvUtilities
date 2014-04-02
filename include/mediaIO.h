@@ -92,8 +92,8 @@ bool             dlmwriteBool (const std::string& dlmfilePath, const cv::Mat& ma
 
 // matrix will be always CV_32F on output, number of columns - from the largest row
 // function will complete shorter rows with zeros
-cv::Mat          dlmread (const std::string& dlmfilePath, cv::Mat matrix = cv::Mat(), int row1 = 0);
-bool             dlmreadBool (const std::string& dlmfilePath, cv::Mat matrix = cv::Mat(), int row1 = 0);
+cv::Mat          dlmread (const std::string& dlmfilePath, cv::Mat matrix = cv::Mat(), int row1 = 0, int col1 = 0);
+bool             dlmreadBool (const std::string& dlmfilePath, cv::Mat matrix = cv::Mat(), int row1 = 0, int col1 = 0);
 
 
 
