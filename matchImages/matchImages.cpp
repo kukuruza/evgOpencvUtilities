@@ -144,14 +144,14 @@ int main(int argc, const char * argv[])
     for (int i = 0; i != matchesPairs.size(); ++i)
     {
         float ratio = matchesPairs[i][0].distance / matchesPairs[i][1].distance;
-        //cout << ratio << " ";
         if (ratio < threshold)
         {
+            if (verbose >= 2) cout << ratio << " ";
             matchesPairs[i][0].distance = ratio;
             matches.push_back (matchesPairs[i][0]);
         }
     }
-    //cout << endl;
+    if (verbose >= 2) cout << endl;
 
     
     // write results
