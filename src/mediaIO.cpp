@@ -570,6 +570,7 @@ SrcVideo::SrcVideo (const Type _type, const std::string _videoPath)
                 "but file path is not specified." << endl;
 }
 
+
 SrcVideo::SrcVideo (const SrcVideo& other)
   : type (other.type),
     videoPath(other.videoPath),
@@ -577,6 +578,17 @@ SrcVideo::SrcVideo (const SrcVideo& other)
     CameraHeight(other.CameraHeight)
 {
 }
+
+
+SrcVideo SrcVideo::operator= (const SrcVideo& other)
+{
+    type = other.type;
+    videoPath = other.videoPath;
+    CameraWidth = other.CameraWidth;
+    CameraHeight = other.CameraHeight;
+    return *this;
+}
+
 
 
 bool SrcVideo::openResource(VideoCapture& video)

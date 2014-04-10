@@ -121,14 +121,16 @@ private:
     Type type;
     std::string videoPath;
     // your favorite camera resoluton, it is now set in constructor to 640 x 480
-    const unsigned int CameraWidth, CameraHeight;
+    unsigned int CameraWidth, CameraHeight;
 
     friend bool operator== (const SrcVideo&, const SrcVideo&);
     friend bool operator!= (const SrcVideo&, const SrcVideo&);
 public:
 
+    // copy control
     SrcVideo (const Type _type = NOT_SET, const std::string _videoPath = "");
     SrcVideo (const SrcVideo& other);
+    SrcVideo operator= (const SrcVideo& other);
     
     // start video from specified input
     bool                        openResource (cv::VideoCapture& video);
