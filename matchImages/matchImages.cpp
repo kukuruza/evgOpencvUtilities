@@ -95,7 +95,7 @@ int main(int argc, const char * argv[])
     
     ValueArg<string> cmd1st ("1", "1st", "1st image file path", true, "", "string", cmd);
     ValueArg<string> cmd2nd ("2", "2nd", "2nd image file path", true, "", "string", cmd);
-    ValueArg<float> cmdThresh ("t", "threshold", "threshold for matching, higher gives more matches", true, 3, "float", cmd);
+    ValueArg<float> cmdThresh ("t", "threshold", "threshold for matching, 0-1, higher gives more matches", true, 3, "float", cmd);
     ValueArg<string> cmdOutM  ("o", "outmat", "file path for matches", false, "/dev/null", "string", cmd);
     SwitchArg cmdDisableImshow ("", "disable_image", "don't show image", cmd);
     MultiSwitchArg cmdVerbose ("v", "", "Level of verbosity of output", cmd);
@@ -110,12 +110,17 @@ int main(int argc, const char * argv[])
     int              verbose        = cmdVerbose.getValue();
     
     // file for output
-    if (! exists(absolute(path(outMName)).parent_path()))
+    path outMPath = absolute(path(outMName));
+    if (! exists(outMPath.parent_path()))
     {
-        cerr << "parent path " << path(outMName).parent_path() << " doesn't exist." << endl;
+        cerr << "parent path " << outMPath.parent_path() << " doesn't exist." << endl;
         return -1;
     }
-    string outMPath = absolute(path(outMName)).string();
+    if (is_directory(outMPath))
+    {
+        cerr << "writeSimpleMatches: Need a filename, not a directory: " << outMPath << endl;
+        return -1;
+    }
     
     // load images
     Mat im1, im2;
@@ -155,7 +160,7 @@ int main(int argc, const char * argv[])
 
     
     // write results
-    evg::writeSimpleMatches (outMPath, imageName1, imageName2, keypoints1, keypoints2, matches);
+    evg::writeSimpleMatches (outMPath.string(), imageName1, imageName2, keypoints1, keypoints2, matches);
     
     if (!disableImshow)
     {

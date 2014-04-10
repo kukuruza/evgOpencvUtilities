@@ -7,12 +7,15 @@
 #include <sstream>
 #include <stdexcept>
 
+#include <boost/filesystem.hpp>
+
 #include "featuresIO.h"
 
 namespace cv {
 namespace evg {
 
 using namespace std;
+using namespace boost::filesystem;
 
 
 bool is_little_endian()
@@ -666,14 +669,26 @@ bool readVsfmMatches    (const string& filepath, string& imName1, string& imName
 }
 
 
-bool writeSimpleMatches (const std::string& filepath,
+bool writeSimpleMatches (const std::string& outFileName,
                          const std::string& imName1, const std::string& imName2,
                          const std::vector<cv::KeyPoint>& keypoints1,
                          const std::vector<cv::KeyPoint>& keypoints2,
                          const std::vector<cv::DMatch>& matches)
 {
     try {
-        ofstream ofs (filepath.c_str(), ios::binary);
+        path outFilePath (outFileName);
+        if (is_directory(outFilePath))
+        {
+            cerr << "writeSimpleMatches: Need a filename, not a directory: " << outFilePath << endl;
+            return 0;
+        }
+        if (!exists(outFilePath.parent_path()))
+        {
+            cerr << "writeSimpleMatches: Parent path does not exist for: " << outFilePath << endl;
+            return 0;
+        }
+        
+        ofstream ofs (outFilePath.string().c_str(), ios::binary);
         if (!ofs) throw runtime_error("evg::writeSimpleMatches: cannot open file for writing");
         
         // header

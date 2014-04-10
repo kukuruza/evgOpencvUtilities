@@ -127,8 +127,8 @@ private:
     friend bool operator!= (const SrcVideo&, const SrcVideo&);
 public:
 
-    // constructor
     SrcVideo (const Type _type = NOT_SET, const std::string _videoPath = "");
+    SrcVideo (const SrcVideo& other);
     
     // start video from specified input
     bool                        openResource (cv::VideoCapture& video);
