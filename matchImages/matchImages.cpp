@@ -98,7 +98,7 @@ int main(int argc, const char * argv[])
     ValueArg<float> cmdThresh ("t", "threshold", "threshold for matching, 0-1, higher gives more matches", true, 3, "float", cmd);
     ValueArg<string> cmdOutM  ("o", "outmat", "file path for matches", false, "/dev/null", "string", cmd);
     SwitchArg cmdDisableImshow ("", "disable_image", "don't show image", cmd);
-    MultiSwitchArg cmdVerbose ("v", "", "Level of verbosity of output", cmd);
+    MultiSwitchArg cmdVerbose ("v", "", "level of verbosity of output", cmd);
     
     cmd.parse(argc, argv);
     string           featureType    = cmdFeature.getValue();

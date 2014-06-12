@@ -19,8 +19,8 @@
 //   opencv_core
 //
 // Notes:
-//   everything is wrapped in namespace 'evg' for convenience 
-//   everything is float (common practice for 3D)
+//   everything is wrapped in namespace 'cv::evg' for convenience 
+//   everything is float
 //   error policy: exceptions are promoted, asserts are used
 //   links to algorithms are given in the .cpp file
 //

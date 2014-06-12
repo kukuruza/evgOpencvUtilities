@@ -345,17 +345,21 @@ Mat dlmread (const std::string& dlmfilePath, cv::Mat matrix, int row1, int col1)
     fileStream.seekg(ios_base::beg);
     
     // create the matrix of result size and of given type (8U by default)
-    matrix = Mat::zeros(numRows, numCols, matrix.type());
+    matrix = Mat::zeros(numRows, numCols, CV_32F);
     
+    // skip header
+    for (int row = 0; row != row1; ++row)
+        getline(fileStream, line);
     // read file and put values into Mat
     float num;
-    for (int row = row1; getline(fileStream, line) && row != matrix.rows; ++row)
+    for (int row = 0; getline(fileStream, line) && row != matrix.rows; ++row)
     {
         iss.clear();
         iss.str(line);
         for (int col = 0; col != matrix.cols && (iss >> num); ++col)
             matrix.at<float>(row, col) = num;
     }
+    
     if(fileStream.bad() || iss.bad())
     {
         std::cerr << "evg::dlmread(): error reading the file." << std::endl;

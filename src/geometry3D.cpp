@@ -153,6 +153,7 @@ cv::Matx33f cameraK (const cv::Size& imageSize)
 }
 
 
+// if P = [R t] then C = - R't
 Matx33f pose2H (const Matx33f& K0, const Matx44f& p, const Matx33f& K)
 {
     // init R and t separately
@@ -173,7 +174,7 @@ Matx33f pose2H (const Matx33f& K0, const Matx44f& p, const Matx33f& K)
 }
 
 
-// from "Multiple View Geometry in Computer Vision 2nd Edition" Hartley, Zisserman
+// from "Multiple View Geometry in Computer Vision 2nd Edition" by Hartley, Zisserman
 //   (pp.326-327 in 2nd edition)
 cv::Matx33f pose2H (const cv::Matx33f& _K0, const cv::Matx41f& _plane,
                     const cv::Matx44f& _pose, const cv::Matx33f& _K)
