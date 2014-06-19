@@ -90,10 +90,15 @@ bool             testImageBool (const cv::Mat& image);
 void             dlmwrite (const std::string& dlmfilePath, const cv::Mat& matrix);
 bool             dlmwriteBool (const std::string& dlmfilePath, const cv::Mat& matrix);
 
-// matrix will be always CV_32F on output, number of columns - from the largest row
-// function will complete shorter rows with zeros
-cv::Mat          dlmread (const std::string& dlmfilePath, cv::Mat matrix = cv::Mat(), int row1 = 0, int col1 = 0);
-bool             dlmreadBool (const std::string& dlmfilePath, cv::Mat matrix = cv::Mat(), int row1 = 0, int col1 = 0);
+// read matrix with the specified underlying type
+// number of columns - from the largest row, short rows are padded with zeros
+template<typename Tp>
+cv::Mat dlmread (const std::string& dlmfilePath, cv::Mat matrix, int row1);
+
+// matrix will be always CV_32F on output
+// number of columns - from the largest row, short rows are padded with zeros
+cv::Mat          dlmread (const std::string& dlmfilePath, cv::Mat matrix = cv::Mat(), int row1 = 0);
+bool             dlmreadBool (const std::string& dlmfilePath, cv::Mat matrix = cv::Mat(), int row1 = 0);
 
 
 

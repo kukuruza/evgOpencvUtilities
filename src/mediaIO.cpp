@@ -300,9 +300,81 @@ bool testImageBool (const cv::Mat& image)
 }
 
 
+
+template<typename Tp>
+Mat dlmread (const std::string& dlmfilePath, cv::Mat matrix, int row1)
+{
+    // open file
+    path p = absolute(path(dlmfilePath));
+    if (! exists(p) )
+    {
+        cerr << "evg::dlmread(): Path " << p << " does not exist." << endl;
+        throw exception();
+    }
+    ifstream fileStream (p.string().c_str());
+    if (!fileStream.good())
+    {
+        cerr << "evg::dlmread(): File " << p << " failed to open." << endl;
+        throw exception();
+    }
+    
+    // read file to compute the matrix size [numRows, numCols]
+    string line;
+    istringstream iss;
+    unsigned int row = 0, col = 0, numRows = 0, numCols = 0;
+    for (row = 0; getline(fileStream, line); ++row)
+    {
+        // process the empty line in the end of file
+        if (line == "") { --row; break; }
+        iss.clear();
+        iss.str(line);
+        double dummy;
+        for (col = 0; (iss >> dummy); ++col)
+            ;
+        if (col > numCols) numCols = col;
+    }
+    numRows = row - row1;
+    if(fileStream.bad() || iss.bad())
+    {
+        std::cerr << "evg::dlmread(): error reading the file " << p << std::endl;
+        throw exception();
+    }
+    
+    // rewind the file
+    fileStream.clear();
+    fileStream.seekg(ios_base::beg);
+    
+    // create the matrix of result size and of given type (8U by default)
+    matrix = Mat::zeros(numRows, numCols, DataType<Tp>::channel_type);
+    
+    // skip header
+    for (int row = 0; row != row1; ++row)
+        getline(fileStream, line);
+    // read file and put values into Mat
+    float num;
+    for (int row = 0; getline(fileStream, line) && row != matrix.rows; ++row)
+    {
+        iss.clear();
+        iss.str(line);
+        for (int col = 0; col != matrix.cols && (iss >> num); ++col)
+            matrix.at<Tp>(row, col) = num;
+    }
+    
+    if(fileStream.bad() || iss.bad())
+    {
+        std::cerr << "evg::dlmread(): error reading the file." << std::endl;
+        throw exception();
+    }
+    
+    return matrix;
+}
+
+
+
+
 // delimiter is always space or tab
 // matrix will put zeros for missing values
-Mat dlmread (const std::string& dlmfilePath, cv::Mat matrix, int row1, int col1)
+Mat dlmread (const std::string& dlmfilePath, cv::Mat matrix, int row1)
 {
     // open file
     path p = absolute(path(dlmfilePath));
@@ -370,10 +442,10 @@ Mat dlmread (const std::string& dlmfilePath, cv::Mat matrix, int row1, int col1)
 }
 
 
-bool dlmreadBool (const std::string& dlmfilePath, Mat matrix, int row1, int col1)
+bool dlmreadBool (const std::string& dlmfilePath, Mat matrix, int row1)
 {
     try {
-        matrix = dlmread (dlmfilePath, matrix, row1, col1);
+        matrix = dlmread (dlmfilePath, matrix, row1);
         return 1;
     } catch(...) {
         cerr << "evg::dlmread(): failed." << endl;
