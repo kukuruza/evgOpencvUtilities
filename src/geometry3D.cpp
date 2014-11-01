@@ -10,6 +10,14 @@ namespace evg {
 using namespace std;
 
 
+cv::Matx33f skewsym (const cv::Matx31f& v)
+{
+    return Matx33f (0, -v(2), v(1),
+                    v(2), 0, -v(0),
+                    -v(1), v(0), 0);
+}
+
+
 cv::Matx44f pose (const cv::Matx33f& R, const cv::Matx31f& t)
 {
     return Matx44f (R(0,0), R(0,1), R(0,2), t(0),

@@ -39,6 +39,12 @@ namespace evg {
 
 
 
+// utilities
+
+// return skew-symmetric matrix
+cv::Matx33f     skewsym (const cv::Matx31f& vector);
+
+
 //
 // pose vs. rotation and translation
 //
