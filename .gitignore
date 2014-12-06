@@ -2,6 +2,10 @@ build/
 # utilities that can become a part of distribution
 proposed/
 
+# CLion IDE
+.idea/workspace.xml
+.idea/.name
+
 # temporary from gedit
 *~
 
