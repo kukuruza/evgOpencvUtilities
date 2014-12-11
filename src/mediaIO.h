@@ -1,5 +1,5 @@
-#ifndef EVG_MEDIA_LOAD_SAVE
-#define EVG_MEDIA_LOAD_SAVE
+#ifndef EVG_MEDIA_IO
+#define EVG_MEDIA_IO
 
 #include <string>
 #include <vector>

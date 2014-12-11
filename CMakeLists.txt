@@ -49,6 +49,8 @@ set(LIB_SOURCE_FILES
     src/geometry3D.h
     src/mediaIO.cpp
     src/mediaIO.h
+    src/multiview.cpp
+    src/multiview.h
     src/miscellaneous.h)
 
 add_library(evgOpencvUtilities ${LIB_SOURCE_FILES})
