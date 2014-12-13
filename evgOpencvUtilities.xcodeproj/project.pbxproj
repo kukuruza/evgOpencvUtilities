@@ -125,6 +125,21 @@
 		BECC869A1A3967B800490678 /* matchImages.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE9EB0901A395CB000E753EF /* matchImages.cpp */; };
 		BECC869B1A3967BA00490678 /* mediaIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE9EB0911A395CB000E753EF /* mediaIO.cpp */; };
 		BECC869C1A3967BC00490678 /* featuresIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE9EB08C1A395CB000E753EF /* featuresIO.cpp */; };
+		BECC86DE1A3CA7A400490678 /* multiview_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BECC86DD1A3CA7A400490678 /* multiview_test.cpp */; };
+		BECC86E21A3CA84500490678 /* multiview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE9EB0941A395CB000E753EF /* multiview.cpp */; };
+		BECC86E41A3CA89F00490678 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BECC86E31A3CA89F00490678 /* gtest.framework */; };
+		BECC86E51A3CA8C100490678 /* libopencv_calib3d.2.4.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BECC85A41A395D9200490678 /* libopencv_calib3d.2.4.9.dylib */; };
+		BECC86E61A3CA8C100490678 /* libopencv_core.2.4.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BECC85A51A395D9200490678 /* libopencv_core.2.4.9.dylib */; };
+		BECC86E71A3CA8C100490678 /* libopencv_features2d.2.4.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BECC85A61A395D9200490678 /* libopencv_features2d.2.4.9.dylib */; };
+		BECC86E81A3CA8C100490678 /* libopencv_flann.2.4.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BECC85A71A395D9200490678 /* libopencv_flann.2.4.9.dylib */; };
+		BECC86E91A3CA8C100490678 /* libopencv_highgui.2.4.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BECC85A81A395D9200490678 /* libopencv_highgui.2.4.9.dylib */; };
+		BECC86EA1A3CA8C100490678 /* libopencv_imgproc.2.4.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BECC85A91A395D9200490678 /* libopencv_imgproc.2.4.9.dylib */; };
+		BECC86EB1A3CA8C100490678 /* libopencv_nonfree.2.4.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BECC85AA1A395D9200490678 /* libopencv_nonfree.2.4.9.dylib */; };
+		BECC86EC1A3CA8C100490678 /* libopencv_video.2.4.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BECC85AB1A395D9200490678 /* libopencv_video.2.4.9.dylib */; };
+		BECC86ED1A3CA8C100490678 /* libboost_filesystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BECC85A01A395D5600490678 /* libboost_filesystem.dylib */; };
+		BECC86EE1A3CA8C100490678 /* libboost_system.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BECC85A11A395D5600490678 /* libboost_system.dylib */; };
+		BECC86EF1A3CA8DB00490678 /* geometry3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE9EB08E1A395CB000E753EF /* geometry3D.cpp */; };
+		BECC86F11A3CA8F100490678 /* mediaIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE9EB0911A395CB000E753EF /* mediaIO.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -147,6 +162,15 @@
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 		BECC86861A39679B00490678 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		BECC86D91A3CA7A400490678 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -191,6 +215,9 @@
 		BECC864E1A3966C700490678 /* undistortImage */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = undistortImage; sourceTree = BUILT_PRODUCTS_DIR; };
 		BECC865A1A3966E000490678 /* undistortVideo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = undistortVideo; sourceTree = BUILT_PRODUCTS_DIR; };
 		BECC86881A39679B00490678 /* matchImages */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = matchImages; sourceTree = BUILT_PRODUCTS_DIR; };
+		BECC86DB1A3CA7A400490678 /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test; sourceTree = BUILT_PRODUCTS_DIR; };
+		BECC86DD1A3CA7A400490678 /* multiview_test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = multiview_test.cpp; sourceTree = "<group>"; };
+		BECC86E31A3CA89F00490678 /* gtest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gtest.framework; path = ../../../../Library/Frameworks/gtest.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -347,6 +374,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BECC86D81A3CA7A400490678 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BECC86E61A3CA8C100490678 /* libopencv_core.2.4.9.dylib in Frameworks */,
+				BECC86EA1A3CA8C100490678 /* libopencv_imgproc.2.4.9.dylib in Frameworks */,
+				BECC86E41A3CA89F00490678 /* gtest.framework in Frameworks */,
+				BECC86E71A3CA8C100490678 /* libopencv_features2d.2.4.9.dylib in Frameworks */,
+				BECC86EE1A3CA8C100490678 /* libboost_system.dylib in Frameworks */,
+				BECC86E51A3CA8C100490678 /* libopencv_calib3d.2.4.9.dylib in Frameworks */,
+				BECC86ED1A3CA8C100490678 /* libboost_filesystem.dylib in Frameworks */,
+				BECC86EC1A3CA8C100490678 /* libopencv_video.2.4.9.dylib in Frameworks */,
+				BECC86E91A3CA8C100490678 /* libopencv_highgui.2.4.9.dylib in Frameworks */,
+				BECC86EB1A3CA8C100490678 /* libopencv_nonfree.2.4.9.dylib in Frameworks */,
+				BECC86E81A3CA8C100490678 /* libopencv_flann.2.4.9.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -355,6 +400,7 @@
 			children = (
 				BE9EB0A31A395CC500E753EF /* lib */,
 				BE9EB0891A395C9E00E753EF /* src */,
+				BECC86DC1A3CA7A400490678 /* test */,
 				BE9EB0831A395C7400E753EF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -371,6 +417,7 @@
 				BECC864E1A3966C700490678 /* undistortImage */,
 				BECC865A1A3966E000490678 /* undistortVideo */,
 				BECC86881A39679B00490678 /* matchImages */,
+				BECC86DB1A3CA7A400490678 /* test */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -399,6 +446,7 @@
 		BE9EB0A31A395CC500E753EF /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				BECC86E31A3CA89F00490678 /* gtest.framework */,
 				BECC85A41A395D9200490678 /* libopencv_calib3d.2.4.9.dylib */,
 				BECC85A51A395D9200490678 /* libopencv_core.2.4.9.dylib */,
 				BECC85A61A395D9200490678 /* libopencv_features2d.2.4.9.dylib */,
@@ -411,6 +459,14 @@
 				BECC85A11A395D5600490678 /* libboost_system.dylib */,
 			);
 			name = lib;
+			sourceTree = "<group>";
+		};
+		BECC86DC1A3CA7A400490678 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				BECC86DD1A3CA7A400490678 /* multiview_test.cpp */,
+			);
+			path = test;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -625,6 +681,23 @@
 			productReference = BECC86881A39679B00490678 /* matchImages */;
 			productType = "com.apple.product-type.tool";
 		};
+		BECC86DA1A3CA7A400490678 /* test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BECC86E11A3CA7A400490678 /* Build configuration list for PBXNativeTarget "test" */;
+			buildPhases = (
+				BECC86D71A3CA7A400490678 /* Sources */,
+				BECC86D81A3CA7A400490678 /* Frameworks */,
+				BECC86D91A3CA7A400490678 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = test;
+			productName = test;
+			productReference = BECC86DB1A3CA7A400490678 /* test */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -661,6 +734,9 @@
 					BECC86871A39679B00490678 = {
 						CreatedOnToolsVersion = 6.1.1;
 					};
+					BECC86DA1A3CA7A400490678 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
 				};
 			};
 			buildConfigurationList = BE9EB07D1A395C7400E753EF /* Build configuration list for PBXProject "evgOpencvUtilities" */;
@@ -684,6 +760,7 @@
 				BECC864D1A3966C700490678 /* undistortImage */,
 				BECC86591A3966E000490678 /* undistortVideo */,
 				BECC86871A39679B00490678 /* matchImages */,
+				BECC86DA1A3CA7A400490678 /* test */,
 			);
 		};
 /* End PBXProject section */
@@ -766,6 +843,17 @@
 				BECC869A1A3967B800490678 /* matchImages.cpp in Sources */,
 				BECC869C1A3967BC00490678 /* featuresIO.cpp in Sources */,
 				BECC869B1A3967BA00490678 /* mediaIO.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BECC86D71A3CA7A400490678 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BECC86F11A3CA8F100490678 /* mediaIO.cpp in Sources */,
+				BECC86E21A3CA84500490678 /* multiview.cpp in Sources */,
+				BECC86DE1A3CA7A400490678 /* multiview_test.cpp in Sources */,
+				BECC86EF1A3CA8DB00490678 /* geometry3D.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1182,6 +1270,42 @@
 			};
 			name = Release;
 		};
+		BECC86DF1A3CA7A400490678 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/opencv/2.4.9/lib,
+					/usr/local/Cellar/boost/1.56.0/lib,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BECC86E01A3CA7A400490678 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/opencv/2.4.9/lib,
+					/usr/local/Cellar/boost/1.56.0/lib,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1201,6 +1325,7 @@
 				BECC85BB1A395F6D00490678 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BECC85C21A395F8B00490678 /* Build configuration list for PBXNativeTarget "evgMultiview" */ = {
 			isa = XCConfigurationList;
@@ -1209,6 +1334,7 @@
 				BECC85C41A395F8B00490678 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BECC85D41A395FBF00490678 /* Build configuration list for PBXNativeTarget "evgGeometry3D" */ = {
 			isa = XCConfigurationList;
@@ -1217,6 +1343,7 @@
 				BECC85D61A395FBF00490678 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BECC85DC1A395FDC00490678 /* Build configuration list for PBXNativeTarget "evgFeaturesIO" */ = {
 			isa = XCConfigurationList;
@@ -1225,6 +1352,7 @@
 				BECC85DE1A395FDC00490678 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BECC85E61A39600600490678 /* Build configuration list for PBXNativeTarget "evgAngles3D" */ = {
 			isa = XCConfigurationList;
@@ -1233,6 +1361,7 @@
 				BECC85E81A39600600490678 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BECC86261A39630100490678 /* Build configuration list for PBXNativeTarget "evgOpencvUtilities" */ = {
 			isa = XCConfigurationList;
@@ -1241,6 +1370,7 @@
 				BECC86281A39630100490678 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BECC86521A3966C700490678 /* Build configuration list for PBXNativeTarget "undistortImage" */ = {
 			isa = XCConfigurationList;
@@ -1249,6 +1379,7 @@
 				BECC86541A3966C700490678 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BECC865E1A3966E000490678 /* Build configuration list for PBXNativeTarget "undistortVideo" */ = {
 			isa = XCConfigurationList;
@@ -1257,12 +1388,22 @@
 				BECC86601A3966E000490678 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BECC868C1A39679B00490678 /* Build configuration list for PBXNativeTarget "matchImages" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BECC868D1A39679B00490678 /* Debug */,
 				BECC868E1A39679B00490678 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BECC86E11A3CA7A400490678 /* Build configuration list for PBXNativeTarget "test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BECC86DF1A3CA7A400490678 /* Debug */,
+				BECC86E01A3CA7A400490678 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};

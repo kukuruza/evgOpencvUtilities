@@ -99,7 +99,7 @@ float twoViewError (const Matx44f& pose2, const Matx31f& p1, const Matx31f& p2)
 
     Matx31f q1 = p1;
     Matx31f q2 = R2.t() * p2;
-    return dot (q1, cross(t2, q2));
+    return std::abs(dot (q1, cross(t2, q2)));
 }
 
 
