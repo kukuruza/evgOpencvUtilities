@@ -1,6 +1,6 @@
 %% paths for generated data, make data_dir empty to skip writing
 
-data_dir = '../multiviewData/';
+data_dir = '../multiviewData/general/';
 
 pose2_name = 'pose2.txt';
 pose3_name = 'pose3.txt';

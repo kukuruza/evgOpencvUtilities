@@ -2,6 +2,11 @@ build/
 # utilities that can become a part of distribution
 proposed/
 
+
+### Matlab ###
+*~
+
+
 # Created by https://www.gitignore.io
 
 ### Xcode ###
