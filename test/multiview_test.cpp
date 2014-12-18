@@ -25,8 +25,8 @@ protected:
   const string matches12_noisy_name = "matches12-noisy.txt";
   const string matches23_noisy_name = "matches23-noisy.txt";
   const string matches31_noisy_name = "matches31-noisy.txt";
-  const string pose2_name = "pose2.txt";
-  const string pose3_name = "pose3.txt";
+  const string pose2_name = "pose2-clear.txt";
+  const string pose3_name = "pose3-clear.txt";
   
   Mat matches123_clear, matches123_noisy;
   Mat matches12_clear, matches12_noisy;
@@ -130,8 +130,8 @@ protected:
   const string data_dir = "multiviewData/degenerate/";
   const string matches123_clear_name = "matches123-clear.txt";
   const string matches123_noisy_name = "matches123-noisy.txt";
-  const string pose2_name = "pose2.txt";
-  const string pose3_name = "pose3.txt";
+  const string pose2_name = "pose2-clear.txt";
+  const string pose3_name = "pose3-clear.txt";
   
   Mat matches123_clear, matches123_noisy;
   

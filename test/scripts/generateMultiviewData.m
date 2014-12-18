@@ -2,8 +2,10 @@
 
 data_dir = '../multiviewData/general/';
 
-pose2_name = 'pose2.txt';
-pose3_name = 'pose3.txt';
+pose2_clear_name = 'pose2-clear.txt';
+pose3_clear_name = 'pose3-clear.txt';
+pose2_noisy_name = 'pose2-noisy.txt';
+pose3_noisy_name = 'pose3-noisy.txt';
 
 E12_name = 'E1to2.txt';
 E13_name = 'E1to3.txt';
@@ -17,8 +19,9 @@ matches12_noisy_name = 'matches12-noisy.txt';
 matches23_noisy_name = 'matches23-noisy.txt';
 matches31_noisy_name = 'matches31-noisy.txt';
 
-randRot = 0;
-randPoints = 0.1;
+randRot = 0.1;
+randTrans = 0.1;
+randPoints = 0.05;
 
 
 %% data
@@ -35,7 +38,12 @@ rotVal = 0.5;
 q = qGetRotQuaternion(rotVal, rotVec);
 R2 = qGetR(q);
 
-dlmwrite([data_dir pose2_name], [R2 t2 + rand(3,1)*randRot; 0 0 0 1], ' ');
+randR2 = skew(rand(3,1) * (randRot-0.5));
+randR3 = skew(rand(3,1) * (randRot-0.5));
+randT2 = (rand(3,1)-0.5) * randTrans;
+randT3 = (rand(3,1)-0.5) * randTrans;
+dlmwrite([data_dir pose2_clear_name], [R2 t2; 0 0 0 1], ' ');
+dlmwrite([data_dir pose2_noisy_name], [randR2*R2 t2+randT2; 0 0 0 1], ' ');
 
 % rotation 3
 rotVec = [-0.5 0.5 0.5];
@@ -43,7 +51,8 @@ rotVal = -0.5;
 q = qGetRotQuaternion(rotVal, rotVec);
 R3 = qGetR(q);
 
-dlmwrite([data_dir pose3_name], [R3 t3 + rand(3,1) * randRot; 0 0 0 1], ' ');
+dlmwrite([data_dir pose3_clear_name], [R3 t3; 0 0 0 1], ' ');
+dlmwrite([data_dir pose3_noisy_name], [randR3*R3 t3+randT3; 0 0 0 1], ' ');
 
 % projection matrices
 P1 = [eye(3) zeros(3,1)];
