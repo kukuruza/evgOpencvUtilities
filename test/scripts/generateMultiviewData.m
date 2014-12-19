@@ -20,7 +20,7 @@ matches23_noisy_name = 'matches23-noisy.txt';
 matches31_noisy_name = 'matches31-noisy.txt';
 
 randRot = 0.1;
-randTrans = 0.1;
+randTrans = 0.2;
 randPoints = 0.05;
 
 
@@ -38,8 +38,8 @@ rotVal = 0.5;
 q = qGetRotQuaternion(rotVal, rotVec);
 R2 = qGetR(q);
 
-randR2 = skew(rand(3,1) * (randRot-0.5));
-randR3 = skew(rand(3,1) * (randRot-0.5));
+randR2 = qGetR(qGetRotQuaternion((rand-0.5)*randRot, (rand(3,1)-0.5)*randRot));
+randR3 = qGetR(qGetRotQuaternion((rand-0.5)*randRot, (rand(3,1)-0.5)*randRot));
 randT2 = (rand(3,1)-0.5) * randTrans;
 randT3 = (rand(3,1)-0.5) * randTrans;
 dlmwrite([data_dir pose2_clear_name], [R2 t2; 0 0 0 1], ' ');
